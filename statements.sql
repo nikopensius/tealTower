@@ -1,4 +1,6 @@
+----------------------------------------
 -- Tabelite loomine
+----------------------------------------
 
 CREATE TABLE kirikud (
     "id"                             integer NOT NULL DEFAULT autoincrement
@@ -32,7 +34,7 @@ CREATE TABLE organisatsioonid (
 CREATE TABLE üritused (
     "id"                             integer DEFAULT autoincrement
    ,"nimetus"                        varchar(60)
-   ,"aeg"                            "datetime"
+   ,"aeg"                            DATETIME
    ,"tüüp"                           integer
    ,"organiseerija"                  integer
    ,"kirik"                          integer
@@ -54,40 +56,64 @@ CREATE TABLE osalemine (
    ,"id"                             integer
 );
 
-create table Ürituste_Tüübid (
-    id                               int not null default autoincrement,
-    Tüüp                             varchar(30),
-    primary key (id)
+create table ürituste_tüübid (
+    "id"                              integer NOT NULL DEFAULT autoincrement,
+    "tüüp"                            varchar(30),
+    PRIMARY KEY (id)
 );
 
+
+----------------------------------------
 -- Välisvõtite lisamine
+----------------------------------------
 
 ALTER TABLE kogudused
-    ADD NOT NULL FOREIGN KEY "kirik" (id)
+    ADD NOT NULL FOREIGN KEY "fk_kirik" (id)
     REFERENCES kirikud (id)
 ;
 
 ALTER TABLE osalemine
-    ADD FOREIGN KEY "organisatsioonid_id" (id)
+    ADD FOREIGN KEY "fk_organisatsioonid_id" (id)
     REFERENCES organisatsioonid (id)   
 ;
 
 ALTER TABLE osalemine
-    ADD FOREIGN KEY "isikud_id" (id)
+    ADD FOREIGN KEY "fk_isikud_id" (id)
     REFERENCES isikud (id)
 ;
-
-alter table üritused
+ALTER TABLE üritused
     add foreign key "fk_üritus_tüüp" (Tüüp)
-    references Ürituste_Tüübid (id)
+    REFERENCES Ürituste_Tüübid (id)
 ;
 
-alter table Üritused
+ALTER TABLE üritused
     add foreign key "fk_üritused_kirik" (Kirik)
-    references Kirikud (id)
+    REFERENCES Kirikud (id)
 ;
 
-alter table Üritused
+ALTER TABLE üritused
     add foreign key "fk_üritused_organiseerija" (Organiseerija)
-    references Organisatsioonid (id)
+    REFERENCES Organisatsioonid (id)
 ;
+
+
+----------------------------------------
+-- Protseduurite loomine
+----------------------------------------
+
+-- 4. Tagastab üritused, mis toimuvad järgmise 7 päeva jooksul (nimetused ja ajad)
+CREATE OR REPLACE PROCEDURE üritused_seitsme_päeva()
+RESULT (
+    nimetus VARCHAR(45),
+    aeg DATETIME
+)
+BEGIN
+    SELECT nimetus, aeg
+    FROM üritused
+    WHERE üritused.aeg BETWEEN CURRENT TIMESTAMP AND üritused.aeg + dateadd(day, 7, CURRENT TIMESTAMP)
+        OR üritused.korduv = 1
+    ORDER BY aeg ASC
+END
+;
+
+-- 5. 
