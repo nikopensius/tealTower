@@ -58,7 +58,7 @@ CREATE TABLE üritused (
         REFERENCES `Organisatsioonid` (`id`),
     CONSTRAINT `fk_Üritused_Tüübid`
         FOREIGN KEY (`tüüp`)
-        REFERENCES `Ürituste_Tüübid` (`id`))
+        REFERENCES `ürituste_tüübid` (`id`))
 ;
 
 CREATE TABLE isikud (
@@ -184,9 +184,6 @@ begin
 select kirikud.nimi, kirikud.aadress, kogudused.nimi, kogudused.telefon 
 from kirikud join kogudused where kogudused.usutunnistus = i_usutunnistus;
 end;
-
-call kir_kog_inf('katoliiklus') - 'Tartu katoliku kirik','Veski 1a','Püha Maarja Tartu katoliku kogudus','500003'
-call kir_kog_inf('Vene õigeusk') - 'Jumalaema uinumise katedraalkirik','Magasini 1','ÕU Püha Jüri Tartu kogudus','500002'
 
 -- 5. Tagastab üritused, mis toimuvad järgmise 7 päeva jooksul (nimetused ja ajad)
 CREATE OR REPLACE PROCEDURE üritused_seitsme_päeva()
