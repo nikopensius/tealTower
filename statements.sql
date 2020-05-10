@@ -78,6 +78,38 @@ CREATE TABLE osalemine (
         REFERENCES "isikud" ("isikukood")
 );
 
+----------------------------------------
+-- Andmete lisamine
+----------------------------------------
+
+INPUT INTO isikud
+FROM 'data\isikud.csv'
+DELIMITED BY ',';
+
+INPUT INTO kirikud
+FROM 'data\\kirikud.csv'
+DELIMITED BY ',';
+
+INPUT INTO kogudused
+FROM 'data\\kogudused.csv'
+DELIMITED BY ',';
+
+INPUT INTO organisatsioonid
+FROM 'data\\organisatsioonid.csv'
+DELIMITED BY ',';
+
+INPUT INTO osalemine
+FROM 'data\\osalemine.csv'
+DELIMITED BY ',';
+
+INPUT INTO ürituste_tüübid
+FROM 'data\\ürituste_tüübid.csv'
+DELIMITED BY ',';
+
+INPUT INTO üritused
+FROM 'data\\üritused.csv'
+DELIMITED BY ',';
+
 
 ----------------------------------------
 -- Protseduurite loomine
